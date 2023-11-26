@@ -2,17 +2,12 @@ from tkinter import *
 import time
 import math
 
-## global variables
+## global style variables
 brown = "#9C6644"
 red = "#C82119"
 green = "#1F5C2E"
 black = "#000000"
 font = "Courier"
-work = 25
-shortBreak = 5
-longBreak = 15
-repeats = 0
-timer = None
 
 
 tk=Tk()
@@ -43,31 +38,46 @@ title.pack(fill='x')
 
 # -------------- timer functions --------------------------------- #
 
+##global function vars
+timer = None
 running = False ## tracking timer movement
+current_time = 0
+
+work = 25
+shortBreak = 5
+longBreak = 15
+repeats = 0
 
 def reset():
+    global running
     tk.after_cancel(timer)
     canvas.itemconfig(timer_text, text="00:00")
-    title.config(text="Timer")
-    global reps
-    reps = 0
+    title.config(text="Timer", fg=black)
+    running = False
+    current_time = 0
+    # global reps
+    # reps = 0
+
+def start_timer(duration, label_text, label_color):
+    global running, current_time
+    if not running:
+        running = True
+        counting(duration * 60)
+        title.config(text=label_text, fg=label_color)
 
 def starter():
-    global repeats
+    global repeats, work, shortBreak, longBreak
     repeats += 1
-    working_sec = work * 60
-    shortBS = shortBreak * 60
-    longBS = longBreak * 60
+    work = 25
+    shortBreak = 5
+    longBreak = 15
 
-    if repeats % 8 == 0: ## every 8th rep = long break
-        counting(longBS)
-        title.config(text="Long Break",fg=red)
+    if repeats % 8 == 0:
+        start_timer(longBreak, "Long Break", red)
     elif repeats % 2 == 0:
-        counting(shortBS)
-        title.config(text="Short Break", fg=red)
+        start_timer(shortBreak, "Short Break", red)
     else:
-        counting(working_sec)
-        title.config(text="Work", fg=green)
+        start_timer(work, "Work", green)
 
 # ----------------- button styles ------------------------------------ #
 
