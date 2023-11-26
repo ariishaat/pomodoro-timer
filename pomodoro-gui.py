@@ -1,5 +1,3 @@
-# pomodoro timer using python GUI
-
 from tkinter import *
 import time
 import math
@@ -40,19 +38,13 @@ header_frame.pack(fill='x',side="top")
 
 timer_text = canvas.create_text(250,50, text="00:00", fill=None, font=(font, 30, "bold"), anchor="center")
 
-def update_timer_text(event):
-    width = event.width
-    height = event.height
-    font_size = min(width // 12, height // 6)
-    canvas.itemconfig(timer_text, font=(font, 30, "bold"))
-
-
-tk.bind('<Configure>', update_timer_text)
-
 title = Label(text="Timer", fg=black, bg=brown, font=(font, 50))
 title.pack(fill='x')
 
-# ----------------------------------------------------------------- #
+# -------------- timer functions --------------------------------- #
+
+running = False ## tracking timer movement
+
 def reset():
     tk.after_cancel(timer)
     canvas.itemconfig(timer_text, text="00:00")
@@ -77,7 +69,7 @@ def starter():
         counting(working_sec)
         title.config(text="Work", fg=green)
 
-# ----------------------------------------------------------------- #
+# ----------------- button styles ------------------------------------ #
 
 button_frame = Frame(tk, bg=brown)
 button_frame.pack(fill='x')
@@ -111,5 +103,6 @@ def counting(count):
 
 
 tk.mainloop()
+
 
 # press reset to end the timer
