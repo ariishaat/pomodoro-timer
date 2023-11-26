@@ -13,7 +13,7 @@ font = "Courier"
 tk=Tk()
 tk.title('Pomodoro Timer') ## window title
 
-tk.minsize(300, 200)
+tk.minsize(300, 200) ## window should not minimize less than this size
 
 def responsive_bg(event):
     '''
@@ -49,16 +49,22 @@ longBreak = 15
 repeats = 0
 
 def reset():
+    '''
+    Function for reset button: resets timer
+    '''
     global running
     tk.after_cancel(timer)
     canvas.itemconfig(timer_text, text="00:00")
     title.config(text="Timer", fg=black)
     running = False
     current_time = 0
-    # global reps
-    # reps = 0
 
 def start_timer(duration, label_text, label_color):
+    '''
+    configures start timer, if start timer is pressed the second time,
+    it will start on the next part of the cycle, (technically not supposed to happen,
+    adding this for now to fix the issue of when start is clicked more than once.)
+    '''
     global running, current_time
     if not running:
         running = True
@@ -66,6 +72,9 @@ def start_timer(duration, label_text, label_color):
         title.config(text=label_text, fg=label_color)
 
 def starter():
+    '''
+    Function for start button: starts pomodoro timer
+    '''
     global repeats, work, shortBreak, longBreak
     repeats += 1
     work = 25
