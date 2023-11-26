@@ -5,7 +5,7 @@ import time
 import math
 
 ## global variables
-pink = "#FAD8D6"
+brown = "#9C6644"
 red = "#C82119"
 green = "#1F5C2E"
 black = "#000000"
@@ -18,19 +18,38 @@ timer = None
 
 
 tk=Tk()
-tk.title('Pomodoro') #window title
+tk.title('Pomodoro Timer') ## window title
 
-canvas = Canvas(width=500, height=100, bg=pink, highlightthickness=0)
+tk.minsize(300, 200)
+
+def responsive_bg(event):
+    '''
+    Function to make the background colour responsive 
+    to different screen sizes
+    '''
+    tk.configure(bg=brown)
+
+tk.configure(bg=brown)
+tk.bind('<Configure>', responsive_bg) # Bind resizing event
+
+canvas = Canvas(width=500, height=100, bg=brown, highlightthickness=0)
 canvas.pack()
 
-header_frame = Frame(tk,bg=pink)
+header_frame = Frame(tk,bg=brown)
 header_frame.pack(fill='x',side="top")
-header_label = Label(header_frame, text="Pomodoro Timer", font=("Helvetica", 16), fg=black, bg=pink)
-header_label.pack() ## need to fix header to appear at top
 
-timer_text = canvas.create_text(250,50, text="00:00", fill=black, font=(font, 30, "bold"), anchor="center")
+timer_text = canvas.create_text(250,50, text="00:00", fill=None, font=(font, 30, "bold"), anchor="center")
 
-title = Label(text="Timer", fg=black, bg=pink, font=(font, 50))
+def update_timer_text(event):
+    width = event.width
+    height = event.height
+    font_size = min(width // 12, height // 6)
+    canvas.itemconfig(timer_text, font=(font, 30, "bold"))
+
+
+tk.bind('<Configure>', update_timer_text)
+
+title = Label(text="Timer", fg=black, bg=brown, font=(font, 50))
 title.pack(fill='x')
 
 # ----------------------------------------------------------------- #
@@ -60,16 +79,16 @@ def starter():
 
 # ----------------------------------------------------------------- #
 
-button_frame = Frame(tk, bg=pink)
-button_frame.pack(fill='x') #need to fix this, fill should be pink
+button_frame = Frame(tk, bg=brown)
+button_frame.pack(fill='x')
 
-start_button = Button(text="Start", highlightthickness=0, command=starter)
-start_button.configure(bg=pink, highlightbackground=pink)
-start_button.pack(side="right")
+start_button = Button(button_frame, text="Start", highlightthickness=0, command=starter)
+start_button.configure(bg=brown, highlightbackground=brown)
+start_button.pack(side=LEFT, padx=5, pady=10)
 
-reset_button = Button(text="Reset", highlightthickness=0, command=reset)
-reset_button.configure(bg=pink, highlightbackground=pink)
-reset_button.pack(side="left")
+reset_button = Button(button_frame, text="Reset", highlightthickness=0, command=reset)
+reset_button.configure(bg=brown, highlightbackground=brown)
+reset_button.pack(side=RIGHT, padx=5, pady=10)
 
 # ----------------------------------------------------------------- #
 
@@ -89,6 +108,8 @@ def counting(count):
     else:
         starter()
         work = math.floor(repeats/2)
+
+
 tk.mainloop()
 
 # press reset to end the timer
